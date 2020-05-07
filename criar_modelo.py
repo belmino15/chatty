@@ -1,20 +1,13 @@
-# criando base de treinamento
-training = []
-output_empty = [0] * len(classes)
-for doc in documents:
-    bag = [] # inicializando (e zerando) bag
-    pattern_words = doc[0]
-    pattern_words = [lemmatizer.lemmatize(word.lower()) for word in pattern_words]
+import nltk
+from nltk.stem import WordNetLemmatizer
+import pickle
+import random
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Dropout
+from keras.optimizers import SGD
 
-    # bag terá o mesmo tamanho de words, representando (em formato de vetor) as palavras contidas em "doc"
-    for w in words:
-        bag.append(1) if w in pattern_words else bag.append(0)
-
-    # a saida é composta por 0 e 1, indicando a presença da palavra de "words" no no "doc"
-    output_row = list(output_empty)
-    output_row[classes.index(doc[1])] = 1
-
-    training.append([bag, output_row]) # algo do tipo - ([0,1,0,1,1,0,0,1,0,1], "saudacao")
+training = pickle.load(open('training.pkl','rb'))
 
 # Misturando os dados e transformando em vetor do numpy
 random.shuffle(training)
